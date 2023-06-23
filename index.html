@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(183, 255, 0);
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .icon {
+            margin-right: 5px;
+        }
+
+        #imageBox {
+            display: none;
+            margin: 20px auto;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>*FREE IMAGE TO TEXT Converter*</h2>
+
+        <input type="file" id="myFile" name="filename">
+        <br><br>
+
+        <label for="convertedText"><b>Your Converted Text:</b></label><br><br>
+        <img id="imageBox">
+        <textarea cols="30" name="original" rows="10" style="width: 100%;" id="convertedText"></textarea>
+
+       
+
+        <script src="https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js"></script>
+
+        <script>
+            var myFile = document.getElementById('myFile');
+            myFile.addEventListener('change', recognizeText);
+
+            async function recognizeText({ target: { files } }) {
+                Tesseract.recognize(files[0]).then(function (result) {
+                    console.log("recognizeText: result.text:", result.text);
+                    document.getElementById("convertedText").value = result.text;
+                    document.getElementById("imageBox").src = URL.createObjectURL(files[0]);
+                    document.getElementById("imageBox").style.display = "block";
+                });
+            }
+        </script>
+    </div>
+</body>
+</html>
