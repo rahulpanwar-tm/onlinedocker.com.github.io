@@ -5,7 +5,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: rgba(0, 128, 255, 0.466);
+            background-color: rgb(183, 255, 0);
         }
 
         .container {
@@ -17,7 +17,7 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        h2 {
+        h1 {
             text-align: center;
         }
 
@@ -43,24 +43,6 @@
             max-width: 100%;
             height: auto;
         }
-
-        .preview-image {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 10px;
-        }
-
-        .convert-button {
-            display: block;
-            margin: 10px auto;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
     </style>
 </head>
 <body>
@@ -68,44 +50,28 @@
         <h2>*FREE IMAGE TO TEXT Converter*</h2>
 
         <input type="file" id="myFile" name="filename">
-        <br>
-        <img id="imagePreview" class="preview-image" src=".." alt="Image Preview">
-         <br><br>
+        <br><br>
+
         <label for="convertedText"><b>Your Converted Text:</b></label><br><br>
+        <img id="imageBox">
         <textarea cols="30" name="original" rows="10" style="width: 100%;" id="convertedText"></textarea>
 
-        <button id="convertButton" class="convert-button" disabled>Convert</button>
+       
 
         <script src="https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js"></script>
 
         <script>
             var myFile = document.getElementById('myFile');
-            var imagePreview = document.getElementById('imagePreview');
-            var convertButton = document.getElementById('convertButton');
+            myFile.addEventListener('change', recognizeText);
 
-            myFile.addEventListener('change', function (event) {
-                var file = event.target.files[0];
-                var reader = new FileReader();
-
-                reader.onload = function (event) {
-                    imagePreview.src = event.target.result;
-                    imagePreview.style.display = 'block';
-                    convertButton.disabled = false;
-                };
-
-                reader.readAsDataURL(file);
-            });
-
-            convertButton.addEventListener('click', function () {
-                convertButton.disabled = true;
-
-                var file = myFile.files[0];
-                Tesseract.recognize(file).then(function (result) {
+            async function recognizeText({ target: { files } }) {
+                Tesseract.recognize(files[0]).then(function (result) {
                     console.log("recognizeText: result.text:", result.text);
                     document.getElementById("convertedText").value = result.text;
-                    convertButton.disabled = false;
+                    document.getElementById("imageBox").src = URL.createObjectURL(files[0]);
+                    document.getElementById("imageBox").style.display = "block";
                 });
-            });
+            }
         </script>
     </div>
 </body>
